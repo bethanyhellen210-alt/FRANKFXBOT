@@ -1,0 +1,356 @@
+@use 'components/shared/styles/constants' as *;
+@use 'components/shared/styles/mixins' as *;
+
+/* Add global styles to adjust layout when summary panel should be shown */
+:global {
+  body.show-summary-panel {
+    /* This will make the app adjust its layout to show the summary panel */
+    .strategies__tool-container {
+      width: calc(100% - 320px); /* Adjust width to make room for summary panel */
+      float: left;
+    }
+    
+    /* Make sure the Run button is visible and clickable */
+    .header__run-button, 
+    [data-testid="dt_run_button"],
+    button[aria-label="Run"],
+    .run-panel {
+      z-index: 999 !important;
+      position: relative !important;
+      pointer-events: auto !important;
+    }
+    
+    /* Make sure the summary panel is visible */
+    .summary-panel,
+    .contract-summary,
+    [data-testid="dt_contract_summary"],
+    .sidebar-summary {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+  }
+}
+
+.strategies {
+  padding: 2.4rem;
+  height: 100%;
+  overflow-y: auto;
+  
+  &__header {
+    margin-bottom: 3.2rem;
+  }
+  
+  &__title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--text-prominent);
+    margin-bottom: 0.8rem;
+  }
+  
+  &__description {
+    color: var(--text-general);
+    font-size: 1.4rem;
+  }
+  
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+  }
+  
+  &__section {
+    margin-bottom: 2.4rem;
+    
+    &-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--text-prominent);
+      margin-bottom: 1.6rem;
+    }
+  }
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    
+    @include mobile-or-tablet-screen {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__card {
+    background-color: var(--general-section-1);
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+    
+    &--featured {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      
+      @include desktop-screen {
+        .strategies__card-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 100%;
+        }
+      }
+    }
+    
+    &-header {
+      padding: 1.6rem;
+      background-color: var(--general-section-2);
+      border-bottom: 1px solid var(--general-section-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    &-title {
+      font-weight: bold;
+      color: var(--text-prominent);
+      font-size: 1.6rem;
+      margin: 0;
+    }
+    
+    &-tag {
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.4rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      
+      &--beginner {
+        background-color: var(--status-info);
+        color: white;
+      }
+      
+      &--intermediate {
+        background-color: var(--status-warning);
+        color: white;
+      }
+      
+      &--advanced {
+        background-color: var(--status-danger);
+        color: white;
+      }
+      
+      &--premium {
+        background-color: var(--brand-red-coral);
+        color: white;
+      }
+    }
+    
+    &-content {
+      padding: 1.6rem;
+      
+      p {
+        color: var(--text-general);
+        font-size: 1.4rem;
+        margin-bottom: 1.6rem;
+        line-height: 1.5;
+      }
+    }
+    
+    &-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.6rem;
+      margin-bottom: 1.6rem;
+    }
+    
+    &-stat {
+      flex: 1;
+      min-width: 120px;
+      
+      &-label {
+        display: block;
+        font-size: 1.2rem;
+        color: var(--text-less-prominent);
+        margin-bottom: 0.4rem;
+      }
+      
+      &-value {
+        display: block;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: var(--text-prominent);
+      }
+    }
+  }
+  
+  &__button {
+    padding: 1rem 1.6rem;
+    background-color: var(--general-section-2);
+    color: var(--text-prominent);
+    border: 1px solid var(--general-section-3);
+    border-radius: 0.4rem;
+    font-weight: bold;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background-color: var(--general-hover);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    &--primary {
+      background-color: var(--brand-red-coral);
+      color: white;
+      border: none;
+      
+      &:hover {
+        background-color: var(--brand-red-coral-hover);
+      }
+    }
+  }
+  
+  &__tool {
+    &-container {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 180px);
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.6rem 2.4rem;
+      background-color: #000000;
+      border-bottom: 1px solid #333333;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    
+    &-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+    
+    &-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    &-switch {
+      padding: 0.6rem 1.2rem;
+      background-color: #222222;
+      color: #cccccc;
+      border: 1px solid #444444;
+      border-radius: 0.4rem;
+      font-weight: bold;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-right: 0.8rem;
+      margin-bottom: 0.5rem;
+      
+      &:hover {
+        background-color: #333333;
+        color: white;
+      }
+      
+      &--active {
+        background-color: var(--brand-red-coral);
+        color: white;
+        border-color: var(--brand-red-coral);
+        
+        &:hover {
+          background-color: var(--brand-red-coral-hover);
+        }
+      }
+    }
+    
+    &-back {
+      padding: 0.8rem 1.6rem;
+      background-color: #333333;
+      color: white;
+      border: none;
+      border-radius: 0.4rem;
+      font-weight: bold;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-left: 0.8rem;
+      
+      &:hover {
+        background-color: #444444;
+      }
+    }
+    
+    &-iframe-wrapper {
+      flex: 1;
+      overflow: hidden;
+      background-color: #000000;
+      border-radius: 0.8rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    &-iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  }
+  
+  /* Media query for mobile devices */
+  @include mobile-or-tablet-screen {
+    &__tool {
+      &-container {
+        width: 100% !important; /* Override the width on mobile */
+        float: none !important;
+      }
+      
+      &-header {
+        flex-direction: column;
+        align-items: flex-start;
+        
+        .strategies__tool-title {
+          margin-bottom: 1rem;
+        }
+        
+        .strategies__tool-actions {
+          width: 100%;
+          overflow-x: auto;
+          padding-bottom: 0.5rem;
+          
+          &::-webkit-scrollbar {
+            height: 4px;
+          }
+          
+          &::-webkit-scrollbar-thumb {
+            background-color: #666;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+  }
+}
+
